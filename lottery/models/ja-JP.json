@@ -1,0 +1,90 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "抽選スキル",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "DrawLotsIntent",
+                    "slots": [
+                        {
+                            "name": "winnerCount",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "{winnerCount}",
+                                "{winnerCount} 件にします",
+                                "{winnerCount} 件にしてください",
+                                "{winnerCount} 件",
+                                "{winnerCount} 件です"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "はい",
+                        "抽選 して",
+                        "抽選 を 始めて"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": [
+                        "いいえ"
+                    ]
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "DrawLotsIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "winnerCount",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.1292434666682.1990326609",
+                                "elicitation": "Elicit.Slot.1424358568121.1250545639225"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Confirm.Slot.1292434666682.1990326609",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "{winnerCount} けんで良いですか？"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1424358568121.1250545639225",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "当選者数は何件にしますか？"
+                    }
+                ]
+            }
+        ]
+    }
+}

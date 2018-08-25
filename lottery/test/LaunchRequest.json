@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "session": {
+    "new": true,
+    "sessionId": "session0001",
+    "application": {
+      "applicationId": "amzn1.echo-sdk-ams.app.0001"
+    },
+    "attributes": {},
+    "user": {
+      "userId": "amzn1.ask.account.0001"
+    }
+  },
+  "context": {
+    "System": {
+      "user": {
+        "userId": "amzn1.ask.account.0001"
+      }
+    }
+  },
+  "request": {
+    "type": "LaunchRequest",
+    "requestId": "request0001",
+    "timestamp": "2018-08-11T13:04:56+0900"
+  }
+}
