@@ -3,7 +3,7 @@
 // Alexa Skills Kit SDK を読み込む
 const Alexa = require('ask-sdk-core');
 
-// PersistentAdapter を読み込む
+// (1) PersistentAdapter を読み込む
 const { DynamoDbPersistenceAdapter } = require('ask-sdk-dynamodb-persistence-adapter');
 const dynamoDbPersistenceAdapter = new DynamoDbPersistenceAdapter({
   tableName: 'LotteryTable'
@@ -29,7 +29,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-// 永続アトリビュートを取得する
+// (2) 永続アトリビュートを取得する
 function getAttributes(attributesManager) {
   return new Promise((resolve, reject) => {
     attributesManager.getPersistentAttributes()
@@ -54,6 +54,7 @@ function setLastState(attributes, state) {
   };
 }
 
+// 状態をクリアする
 function clearLastState(attributes) {
   attributes.lastState = {
     state: STATE_NONE,
@@ -89,7 +90,7 @@ function getLastWinners(attributes) {
   return attributes.winnerHistory[attributes.winnerHistory.length - 1];
 }
 
-// 当選者読み上げの文言を生成する
+// (3) 当選者読み上げの文言を生成する
 function getWinnersSpeech(winners) {
   const winnersString = winners.join('<break time="1s"/>,');
   const winnersSpeechSingle = '<prosody volume="x-loud">当選者は、<break time="1s"/>' + winnersString + '<break time="1s"/>です。</prosody>';
@@ -99,14 +100,14 @@ function getWinnersSpeech(winners) {
 // 抽選を行う
 function drawLots(handlerInput, attributes) {
   console.log(`dialogState: ${handlerInput.requestEnvelope.request.dialogState}`);
+  // (4) 不足している情報を収集する
   if (handlerInput.requestEnvelope.request.dialogState !== 'COMPLETED') {
-    // 不足している情報を収集する
     return handlerInput.responseBuilder
       .addDelegateDirective()
       .getResponse();
   }
 
-  // スロットの値を取得する
+  // (5) スロットの値を取得する
   let winnerCount = Number(handlerInput.requestEnvelope.request.intent.slots.winnerCount.value);
   console.log(`winnerCount: ${winnerCount}`);
   if (isNaN(winnerCount) || winnerCount < 1) {
@@ -123,7 +124,7 @@ function drawLots(handlerInput, attributes) {
     doDrawLots(attributes, winnerCount);
     // 状態をセットする
     setLastState(attributes, STATE_REPEAT);
-    // 永続アトリビュートを保存する
+    // (6) 永続アトリビュートを保存する
     handlerInput.attributesManager.setPersistentAttributes(attributes);
     return handlerInput.attributesManager.savePersistentAttributes()
       .then(() => {
@@ -170,7 +171,7 @@ const LaunchRequestHandler = {
   }
 };
 
-// DrawLotsIntent ハンドラー
+// (7) DrawLotsIntent ハンドラー
 const DrawLotsIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -289,9 +290,8 @@ const ErrorHandler = {
   },
 };
 
-// (4) Lambda 関数ハンドラーを定義する
+// (8) Lambda 関数ハンドラーを定義する
 const skillBuilder = Alexa.SkillBuilders.custom();
-
 exports.handler = skillBuilder
   .withPersistenceAdapter(dynamoDbPersistenceAdapter)
   .addRequestHandlers(
